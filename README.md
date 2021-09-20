@@ -1,24 +1,5 @@
-# awsl
+# weibo awsl 爬虫客户端
 
-## Project setup
-```
-yarn install
-```
+图片瀑布流
 
-### Compiles and hot-reloads for development
-```
-yarn serve
-```
-
-### Compiles and minifies for production
-```
-yarn build
-```
-
-### Lints and fixes files
-```
-yarn lint
-```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+打包成 chrome 插件，来使用
