@@ -3,12 +3,16 @@
     <water-fall gap="10px" width="320px" :data="pic_infos" :delay="true">
       <template #default="item">
         <el-card :body-style="{ padding: '2px' }" shadow="hover">
-          <el-image
-            hide-on-click-modal
+          <img
+            style="width: 100%"
             :src="item.url"
-            :preview-src-list="item.srcList"
-          >
-          </el-image>
+            @click="
+              () => {
+                visiableImg = true;
+                srcList = item.srcList;
+              }
+            "
+          />
           <div style="padding: 14px">
             <el-link :href="item.wb_url" target="_blank">查看原博</el-link>
           </div>
@@ -21,6 +25,16 @@
     <a-back-top />
   </div>
   <div v-else>暂无数据</div>
+  <el-image-viewer
+    v-if="visiableImg"
+    hide-on-click-modal
+    @close="
+      () => {
+        visiableImg = false;
+      }
+    "
+    :url-list="srcList"
+  />
 </template>
 
 <script>
@@ -36,6 +50,8 @@ export default {
       pic_infos: [],
       total: 0,
       loading: false,
+      visiableImg: false,
+      srcList: [],
     };
   },
   mounted() {
