@@ -2,6 +2,8 @@
 
 图片瀑布流
 
+[服务端代码](https://github.com/jinmu333/weibo-awsl)
+
 食用步骤
 
 1. [下载插件](https://github.com/jinmu333/weibo-awsl-vue/releases)
