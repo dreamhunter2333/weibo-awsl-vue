@@ -1,8 +1,10 @@
-function openAWSL() {
-    var url = chrome.extension.getURL("dist/index.html");
-    chrome.tabs.create({ "url": url, "selected": true });
+function openAWSL(tab) {
+    var url = chrome.runtime.getURL("dist/index.html");
+    chrome.tabs.create({
+        "url": url,
+        "active": true
+    });
+
 }
 
-chrome.browserAction.onClicked.addListener(function (tab) {
-    openAWSL();
-});
+chrome.action.onClicked.addListener(tab => { openAWSL(tab); });

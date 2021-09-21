@@ -1,5 +1,5 @@
 {
-    "manifest_version": 2,
+    "manifest_version": 3,
     "name": "Awsl 浏览",
     "version": "1.0",
     "description": "Awsl 查看",
@@ -8,12 +8,14 @@
         "48": "icon.png",
         "128": "icon.png"
     },
+    "permissions": [
+        "tabs"
+    ],
     "background": {
-        "scripts": [
-            "background.js"
-        ]
+        "service_worker": "background.js",
+        "type": "module"
     },
-    "browser_action": {
+    "action": {
         "default_icon": "icon.png"
     }
 }
