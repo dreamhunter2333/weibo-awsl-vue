@@ -1,4 +1,12 @@
 <template>
+  <el-select v-model="uid" @change="chaneUid()" placeholder="请选择来源">
+    <el-option
+      :key="producer.uid"
+      v-for="producer in producers"
+      :label="producer.name"
+      :value="producer.uid"
+    ></el-option>
+  </el-select>
   <div v-if="pic_infos.length">
     <water-fall gap="10px" width="320px" :data="pic_infos" :delay="true">
       <template #default="item">
@@ -47,6 +55,8 @@ export default {
   },
   data() {
     return {
+      uid: "",
+      producers: [],
       pic_infos: [],
       total: 0,
       loading: false,
@@ -55,8 +65,7 @@ export default {
     };
   },
   mounted() {
-    this.fetchCount();
-    this.fetchData(20, 0);
+    this.fetchInit();
     window.addEventListener("scroll", () => {
       const scrollY =
         document.documentElement.scrollTop || document.body.scrollTop; // 滚动条在Y轴上的滚动距离
@@ -78,34 +87,44 @@ export default {
     });
   },
   methods: {
-    fetchData(limit, offset) {
-      axios.get("/list?limit=" + limit + "&offset=" + offset).then((res) => {
-        let pic_infos = res.data.map((item) => {
-          let pic_info = item.pic_info;
-          return {
-            key: pic_info.pic_id,
-            url: pic_info.large.url,
-            srcList: [pic_info.mw2000.url],
-            wb_url: item.wb_url,
-          };
+    async fetchData(limit, offset) {
+      let res = await axios.get("/list?limit=" + limit + "&offset=" + offset + "&uid=" + this.uid)
+      let pic_infos = res.data.map((item) => {
+        let pic_info = item.pic_info;
+        return {
+          key: pic_info.pic_id,
+          url: pic_info.large.url,
+          srcList: [pic_info.mw2000.url],
+          wb_url: item.wb_url,
+        };
+      });
+      this.pic_infos = [...this.pic_infos, ...pic_infos];
+    },
+    async fetchInit() {
+      let producers = await axios.get("/producers");
+      this.producers = producers.data;
+      if (!this.producers){
+        this.$message({
+          showClose: true,
+          message: '找不到 Awsl Producers',
+          type: 'error'
         });
-        this.pic_infos = [...this.pic_infos, ...pic_infos];
-      });
-    },
-    fetchCount() {
-      axios.get("/list_count").then((res) => {
-        this.total = res.data;
-      });
-    },
-    loadMore() {
-      if (this.loading) {
-        return;
       }
+      this.uid = this.producers[0].uid;
+      let res = await axios.get("/list_count?uid=" + this.uid);
+      this.total = res.data;
+      this.fetchData(20, 0);
+    },
+    async chaneUid(){
+      let res = await axios.get("/list_count?uid=" + this.uid);
+      this.total = res.data;
+      this.pic_infos = [];
+      this.fetchData(20, 0);
+    },
+    async loadMore() {
+      if (this.loading || this.total <= this.pic_infos.length) return;
       this.loading = true;
-      if (this.total > this.pic_infos.length) {
-        this.fetchData(5, this.pic_infos.length);
-      }
-      setTimeout(() => {}, 1000);
+      await this.fetchData(5, this.pic_infos.length);
       this.loading = false;
     },
   },
