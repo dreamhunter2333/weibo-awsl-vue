@@ -15,6 +15,7 @@
   "dependencies": {
     "axios": "^0.21.1",
     "core-js": "^3.6.5",
+    "electron-context-menu": "^3.1.1",
     "element-plus": "^1.1.0-beta.12",
     "kuan-vue-waterfall": "^3.0.1",
     "vue": "^3.0.0"
