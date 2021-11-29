@@ -6,13 +6,11 @@
 
 食用步骤
 
-1. [下载插件](https://github.com/jinmu333/weibo-awsl-vue/releases)
-2. 解压到文件夹
-3. 打开插件管理并打开开发者模式
-
-    ![3](readme/3.png)
-
-4. 点击加载已解压的扩展程序
-5. 点击右上角扩展程序中的 awsl
-
-    ![4](readme/4.png)
+```bash
+# 安装、或者下载 zip 安装
+brew install jinmu333/awsl/awsl --cask
+# 允许任何来源
+sudo spctl --master-disable
+# m1 芯片，需要运行
+sudo xattr -r -d com.apple.quarantine /Applications/awsl.app
+```
