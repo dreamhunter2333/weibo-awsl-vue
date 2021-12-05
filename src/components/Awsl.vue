@@ -123,13 +123,13 @@ export default {
       this.uid = this.producers[0].uid;
       let res = await axios.get("/list_count?uid=" + this.uid);
       this.total = res.data;
-      this.fetchData(20, 0);
+      this.fetchData(40, 0);
     },
     async chaneUid() {
       let res = await axios.get("/list_count?uid=" + this.uid);
       this.total = res.data;
       this.pic_infos = [];
-      this.fetchData(20, 0);
+      this.fetchData(40, 0);
     },
     async loadMore() {
       if (this.loading || this.total <= this.pic_infos.length) return;
