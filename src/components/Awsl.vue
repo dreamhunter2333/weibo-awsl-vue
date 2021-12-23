@@ -1,7 +1,12 @@
 <template>
   <el-container>
     <el-header>
-      <el-select v-model="uid" @change="chaneUid()" placeholder="请选择来源">
+      <el-select
+        v-model="uid"
+        @change="chaneUid()"
+        placeholder="请选择来源"
+        clearable
+      >
         <el-option
           :key="producer.uid"
           v-for="producer in producers"
@@ -96,9 +101,11 @@ export default {
   },
   methods: {
     async fetchData(limit, offset) {
-      let res = await axios.get(
-        "/list?limit=" + limit + "&offset=" + offset + "&uid=" + this.uid
-      );
+      let url = "/list?limit=" + limit + "&offset=" + offset;
+      if (this.uid) {
+        url = url + "&uid=" + this.uid;
+      }
+      let res = await axios.get(url);
       let pic_infos = res.data.map((item) => {
         let pic_info = item.pic_info;
         return {
@@ -120,13 +127,17 @@ export default {
           type: "error",
         });
       }
-      this.uid = this.producers[0].uid;
-      let res = await axios.get("/list_count?uid=" + this.uid);
+      this.uid = "";
+      let res = await axios.get("/list_count");
       this.total = res.data;
       this.fetchData(40, 0);
     },
     async chaneUid() {
-      let res = await axios.get("/list_count?uid=" + this.uid);
+      let url = "/list_count";
+      if (this.uid) {
+        url = url + "?uid=" + this.uid;
+      }
+      let res = await axios.get(url);
       this.total = res.data;
       this.pic_infos = [];
       this.fetchData(40, 0);
